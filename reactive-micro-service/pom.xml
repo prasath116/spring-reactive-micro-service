@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.prs.services</groupId>
+	<artifactId>reactive-micro-service</artifactId>
+	<version>1.1</version>
+	<packaging>pom</packaging>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.6.2</version>
+		<relativePath />
+	</parent>
+	<properties>
+		<java.version>11</java.version>
+		<spring-cloud.version>2021.0.0</spring-cloud.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<swagger.version>3.0.0</swagger.version>
+		<springdoc.version>1.4.1</springdoc.version>
+		<lombok.version>1.16.22</lombok.version>
+	</properties>
+
+	<modules>
+		<module>discovery-service</module>
+		<module>config-service</module>
+		<module>employee-service</module>
+		<module>department-service</module>
+		<module>college-service</module>
+		<module>gateway-service</module>
+		<module>student-service</module>
+	</modules>
+	
+</project>

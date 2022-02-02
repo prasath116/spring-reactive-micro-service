@@ -1,0 +1,21 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: config-service
+  profiles:   
+    active: native
+#  cloud:
+#    config:
+#      server:
+#        git:
+#          uri: https://github.com/prasath116/cloud-config
+#          try-master-branch: true
+#          clone-on-start: true
+#          default-label: main
+#          search-paths: university-micro-service/config-service/src/main/resources/config
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8061/eureka/
+          
