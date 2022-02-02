@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
 @Component
-@Profile({"dev", "native"})
+@Profile({"dev", "native", "default"})
 public class ExternalClientDev implements ExternalClient {
 	
 	private static final Logger LOGGER = LogManager.getLogger(ExternalClientDev.class);
