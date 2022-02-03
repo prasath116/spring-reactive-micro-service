@@ -11,9 +11,9 @@ spring:
         git:
           uri: https://github.com/prasath116/cloud-config
           try-master-branch: true
+          search-paths: cloud-reactive-configs
 #          clone-on-start: true
 #          default-label: main
-          search-paths: cloud-reactive-configs
 #eureka:
 #  client:
 #    serviceUrl:
