@@ -3,7 +3,7 @@
 To learn Spring Cloud Microservices and other spring modules, I took code from few samples available in net and clubbed together and pushed it into my git repo to avoid data loss. 
 
 ## Environment Details
-	Maven, Java8, Spring, Spring boot
+	Maven, Java11, Spring, Spring boot
 
 ## Architecture
 Our sample microservice application having following modules:
@@ -33,7 +33,7 @@ Here is the Discovery server dashboard. Instances currently registered with our 
 - **common-utils** - Logger aspect is common for all service. So Generic logger aspect library designed & added in all the services. In future any common things needed for all the business services, we can add it in this common-utils and we can make use of it.
 
 ## Tools and Technologies used
-	- Java 8
+	- Java 11
 	- Lombok pluging 
 	- Maven
 	- Spring
@@ -42,7 +42,7 @@ Here is the Discovery server dashboard. Instances currently registered with our 
 - **Actuator** : To enable **/actuator/refresh** for relaoding cache. And there are lots of endpoints are there in spring we can check here [actuator](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html).
 - **Cloud** : For over all microservice architecture.
 - **Data r2dbc** : Similar to spring data jpa which fetches the data in reactive way. Since we are using web-flux(non-blocling), we should not go with normal Spring data jpa. Since all are small service with single table we didn't explore one-one, one-many, many-one, many-many mappings.
-<img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/R2DbcConfig.PNG" title="R2Dbc config"><br/>
+<img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/R2DbcConfig.png" title="R2Dbc config"><br/>
 - **Exception Handler** : Yet to do.
 - **H2 DB** : Instead of keeping in cache, I used h2 DB to learn basics in spring data r2dbc. Instead of keeping as inmemory DB I stored it in local file to avoid data loss.
 - **Logs** : Logback used to log.
@@ -50,9 +50,9 @@ Here is the Discovery server dashboard. Instances currently registered with our 
 	- *spring.profiles.active* dev or prod. Based on profile we have done logics in department-service
 	- *username* db username.
 	- *password* db password. Db credentials should be from environment variables for security purpose.
-			<img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/EnvVariables.PNG" title="Environment Variables"><br/>
+			<img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/EnvVariables.png" title="Environment Variables"><br/>
 - **Swagger** : springdoc-openapi dependency used. Should not add any dependencied other than these dependencies shown for swagger for web-flux. 
-<img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/Swagger-dependency.PNG" title="Swagger dependency"><br/>
+<img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/Swagger-dependency.png" title="Swagger dependency"><br/>
 Swagger Ui can be accessed via default swagger-ui endpoint /swagger-ui.html. For department-service it will be http://localhost:8060/department/swagger-ui.html . With this inbuild swager ui we can proceed our test instead of going for postman or any other test client or testing tools.
 - **WebFlux** : To achieve non blocking I/O we are using spring 5 webflux & projectreactor.  Flux for more than on object as response and Mono for single object as response. We should not add *spring-boot-starter-web* instead we need to add *spring-boot-starter-webfluxFlux* dependency.
 Defeult server for *spring-boot-starter-webfluxFlux* is netty, which is non-blocking server.
