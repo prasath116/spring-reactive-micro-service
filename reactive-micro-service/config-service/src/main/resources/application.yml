@@ -4,16 +4,16 @@ spring:
   application:
     name: config-service
   profiles:   
-    active: native
-#  cloud:
-#    config:
-#      server:
-#        git:
-#          uri: https://github.com/prasath116/cloud-config
-#          try-master-branch: true
+    active: dev
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/prasath116/cloud-config
+          try-master-branch: true
 #          clone-on-start: true
 #          default-label: main
-#          search-paths: university-micro-service/config-service/src/main/resources/config
+          search-paths: cloud-reactive-configs
 #eureka:
 #  client:
 #    serviceUrl:
