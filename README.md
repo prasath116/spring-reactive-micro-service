@@ -50,7 +50,7 @@ Here is the Discovery server dashboard. Instances currently registered with our 
 	- *spring.profiles.active* dev or prod. Based on profile we have done logics in department-service
 	- *username* db username.
 	- *password* db password. Db credentials should be from environment variables for security purpose.
-			<img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/EnvVariables.png" title="Environment Variables"><br/>
+			<img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/EnvVariables.PNG" title="Environment Variables"><br/>
 - **Swagger** : springdoc-openapi dependency used. Should not add any dependencied other than these dependencies shown for swagger for web-flux. 
 <img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/Swagger-dependency.png" title="Swagger dependency"><br/>
 Swagger Ui can be accessed via default swagger-ui endpoint /swagger-ui.html. For department-service it will be http://localhost:8060/department/swagger-ui.html . With this inbuild swager ui we can proceed our test instead of going for postman or any other test client or testing tools.
