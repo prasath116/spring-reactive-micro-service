@@ -1,5 +1,6 @@
 package com.prs.services.student.service;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 import org.springframework.beans.BeanUtils;
@@ -20,8 +21,9 @@ public class StudentServiceImpl implements IStudentService {
 	private StudentRepository repository;
 
 	@Override
-	public Mono<Student> save(StudentEntity department) {
-		return repository.save(department).map(mapper);
+	public Mono<Student> save(StudentEntity entity) {
+//		return repository.save(entity).map(mapper);Issue in SimpleR2dbcRepository save(e); So used saveAll for time being
+		return repository.saveAll(Arrays.asList(entity)).last().map(mapper);
 	}
 
 	@Override

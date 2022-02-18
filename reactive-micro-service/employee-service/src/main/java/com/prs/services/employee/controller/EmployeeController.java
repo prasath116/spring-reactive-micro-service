@@ -1,5 +1,7 @@
 package com.prs.services.employee.controller;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prs.services.employee.entity.EmployeeEntity;
 import com.prs.services.employee.model.Employee;
 import com.prs.services.employee.service.IEmployeeService;
 
@@ -31,7 +32,7 @@ public class EmployeeController {
 	 */
 	
 	@PostMapping("/add")
-	public Mono<Employee> add(@RequestBody EmployeeEntity employee) {
+	public Mono<Employee> add(@RequestBody @Valid Employee employee) {
 		LOGGER.info("Employee add: {}", employee);
 		return service.save(employee);
 	}

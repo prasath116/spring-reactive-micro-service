@@ -12,4 +12,6 @@ public interface EmployeeRepository extends ReactiveCrudRepository<EmployeeEntit
 	Flux<EmployeeEntity> findByCollegeId(Long collegeId);
 
 	Flux<EmployeeEntity> findByDepartmentId(Long departmentId);
+
+	Flux<EmployeeEntity> findByName(String string);
 }

@@ -1,5 +1,6 @@
 package com.prs.services.department.service;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 import org.springframework.beans.BeanUtils;
@@ -19,8 +20,9 @@ public class DepartmentServiceImpl implements IDepartmentService {
 	private DepartmentRepository repository;
 
 	@Override
-	public Mono<Department> save(DepartmentEntity department) {
-		return repository.save(department).map(mapper);
+	public Mono<Department> save(DepartmentEntity entity) {
+//		return repository.save(entity).map(mapper); Issue in SimpleR2dbcRepository save(e); So used saveAll for time being 
+		return repository.saveAll(Arrays.asList(entity)).last().map(mapper);
 	}
 
 	@Override
