@@ -1,6 +1,6 @@
 
 # Spring Cloud Reactive Microservices sample
-To learn Spring Cloud Microservices and other spring modules, I took code from few samples available in net and clubbed together and pushed it into my git repo to avoid data loss. 
+To learn Spring Cloud Microservices and other spring modules, I took code from various sources and clubbed together and pushed it into my git repo to avoid data loss. 
 
 ## Environment Details
 	Maven, Java11, Spring, Spring boot
