@@ -7,8 +7,10 @@ import reactor.core.publisher.Mono;
 
 public interface IEmployeeService {
 
-	Mono<Employee> save(Employee entity);
+	Mono<Employee> save(Employee employee);
 
+	Mono<Employee> update(Long id, Employee employee);
+	
 	Flux<Employee> findAll();
 
 	Mono<Employee> findById(Long id);
@@ -16,5 +18,6 @@ public interface IEmployeeService {
 	Flux<Employee> findByCollege(Long collegeId);
 
 	Flux<Employee> findByDepartment(Long departmentId);
+
 
 }

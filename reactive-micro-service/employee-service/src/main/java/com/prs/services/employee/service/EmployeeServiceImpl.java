@@ -1,12 +1,12 @@
 package com.prs.services.employee.service;
 
 import java.util.Arrays;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.reactive.TransactionalOperator;
 
 import com.prs.services.employee.entity.EmployeeEntity;
 import com.prs.services.employee.model.Employee;
@@ -22,10 +22,21 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	private EmployeeRepository repository;
 	
 	@Override
-	public Mono<Employee> save(Employee entity) {
+	public Mono<Employee> save(Employee employee) {
 //		return repository.save(entity).map(mapper);  Issue in SimpleR2dbcRepository save(e); So used saveAll for time being
-		Flux<EmployeeEntity> c = repository.saveAll(Arrays.asList(voToEntityMapper.apply(entity)));
+		var entity = voToEntityMapper.apply(employee);
+		Flux<EmployeeEntity> c = repository.saveAll(Arrays.asList(entity));
 		return c.last().map(entityToVomapper);
+	}
+	
+	@Override
+	public Mono<Employee> update(Long id, Employee employee) {
+		return repository.findById(id)
+				.flatMap(entity-> {
+					entityToEntityMapper.accept(employee,entity);
+					Flux<EmployeeEntity> c = repository.saveAll(Arrays.asList(entity));
+					return c.last().map(entityToVomapper);
+				});
 	}
 
 	@Override
@@ -59,6 +70,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		EmployeeEntity response = new EmployeeEntity();
 		BeanUtils.copyProperties(c, response);
 		return response;
+	};
+	
+	private BiConsumer<Employee, EmployeeEntity> entityToEntityMapper = (src,dest) -> {
+		BeanUtils.copyProperties(src, dest);
 	};
 
 }
