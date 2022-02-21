@@ -41,7 +41,9 @@ Here is the Discovery server dashboard. Instances currently registered with our 
 - **AOP** : To log the request/ response from client and request/response which we sent to other external server.
 - **Actuator** : To enable **/actuator/refresh** for relaoding cache. And there are lots of endpoints are there in spring we can check here [actuator](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html).
 - **Cloud** : For over all microservice architecture.
-- **Data r2dbc** : Similar to spring data jpa which fetches the data in reactive way. Since we are using web-flux(non-blocling), we should not go with normal Spring data jpa. Since all are small service with single table we didn't explore one-one, one-many, many-one, many-many mappings.
+- **Data r2dbc** : Similar to spring data jpa which fetches the data in reactive way. Since we are using web-flux(non-blocling), we should not go with normal Spring data jpa.
+There is an issue with ReactiveCrudRepository's *save* method from *spring-boot-starter-data-r2dbc* library. So I used *saveAll* method for even single entity save operation.
+ All are small service with single table, so we didn't explore one-one, one-many, many-one, many-many mappings.
 <img src="https://github.com/prasath116/spring-reactive-micro-service/blob/master/readme-images/R2DbcConfig.png" title="R2Dbc config"><br/>
 - **Exception Handler** : Yet to do.
 - **H2 DB** : Instead of keeping in cache, I used h2 DB to learn basics in spring data r2dbc. Instead of keeping as inmemory DB I stored it in local file to avoid data loss.
