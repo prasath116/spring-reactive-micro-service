@@ -1,5 +1,7 @@
 package com.prs.services.employee.handler;
 
+import java.util.Optional;
+
 import javax.validation.Validator;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +13,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.prs.services.employee.model.Employee;
 import com.prs.services.employee.service.IEmployeeService;
+import com.prs.services.exceptionHandler.NotFoundException;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,6 +29,7 @@ public class EmployeesHandler {
     private Validator validator;
 
     static Mono<ServerResponse> notFound = ServerResponse.notFound().build();
+    static Mono<ServerResponse> badRequest = ServerResponse.badRequest().build();
     
     private Mono<ServerResponse> buildResponse(Flux<Employee> employees) {
         return ServerResponse.ok()
@@ -40,7 +44,12 @@ public class EmployeesHandler {
 	public Mono<ServerResponse> findById(ServerRequest serverRequest) {
 		var id = Long.valueOf(serverRequest.pathVariable("id"));
 		var employee = service.findById(id);
-		return ServerResponse.ok().body(employee, Employee.class);
+		return employee.flatMap(e-> {
+			if(e== null) {
+				log.error("employee is null");
+			}
+			return ServerResponse.ok().body(Mono.just(e), Employee.class);
+		}).switchIfEmpty(Mono.error(new NotFoundException("Employee not available for employee id : "+id)));
 	}
 
 }
