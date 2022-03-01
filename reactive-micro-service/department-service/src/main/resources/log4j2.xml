@@ -50,6 +50,11 @@
 	</Appenders>
 
 	<Loggers>
+		<Logger name="com.prs.services.exceptionHandler" additivity="false"
+			level="debug">
+			<AppenderRef ref="applicationLog" />
+			<AppenderRef ref="console" />
+		</Logger>
 		<Logger name="com.prs.services.department" additivity="false"
 			level="debug">
 			<AppenderRef ref="applicationLog" />
