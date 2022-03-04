@@ -8,7 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.r2dbc.connectionfactory.init.ConnectionFactoryInitializer;
 import org.springframework.data.r2dbc.connectionfactory.init.ResourceDatabasePopulator;
+import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.config.WebFluxConfigurerComposite;
 
 import io.r2dbc.spi.ConnectionFactory;
 
@@ -21,8 +24,21 @@ public class StudentApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StudentApplication.class, args);
 	}
-
+	
 	@Bean
+    public WebFluxConfigurer corsConfigurer() {
+        return new WebFluxConfigurerComposite() {
+
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedOrigins("*")
+                        .allowedMethods("*");
+            }
+        };
+    }
+	
+
+	//@Bean
 	ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
 
 		ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();

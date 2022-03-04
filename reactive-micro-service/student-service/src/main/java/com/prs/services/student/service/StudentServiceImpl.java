@@ -37,6 +37,11 @@ public class StudentServiceImpl implements IStudentService {
 	}
 
 	@Override
+	public Mono<Void> deleteById(Long id) {
+		return repository.deleteById(id);
+	}
+	
+	@Override
 	public Flux<Student> findByCollege(Long collegeId) {
 		return findAll().filter(a -> a.getCollegeId().equals(collegeId));
 //		return Flux.fromIterable(repository.findByCollegeId(collegeId)).map(mapper);
@@ -53,5 +58,6 @@ public class StudentServiceImpl implements IStudentService {
 		BeanUtils.copyProperties(c, response);
 		return response;
 	};
+
 
 }

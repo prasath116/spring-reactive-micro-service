@@ -13,6 +13,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.config.WebFluxConfigurerComposite;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -37,5 +40,13 @@ public class GatewayApplication {
 		});
 		return groups;
 	}
+	
+	/*
+	 * @Bean public WebFluxConfigurer corsConfigurer() { return new
+	 * WebFluxConfigurerComposite() {
+	 * 
+	 * @Override public void addCorsMappings(CorsRegistry registry) {
+	 * registry.addMapping("/**").allowedOrigins("*") .allowedMethods("*"); } }; }
+	 */
 
 }

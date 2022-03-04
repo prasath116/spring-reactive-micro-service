@@ -18,4 +18,6 @@ public interface IStudentService {
 
 	Flux<Student> findByDepartment(Long departmentId);
 
+	Mono<Void> deleteById(Long id);
+
 }
