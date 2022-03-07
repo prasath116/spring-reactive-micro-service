@@ -34,19 +34,23 @@ public class GatewayApplication {
 	public List<GroupedOpenApi> apis() {
 		List<GroupedOpenApi> groups = new ArrayList<>();
 		List<RouteDefinition> definitions = locator.getRouteDefinitions().collectList().block();
-		definitions.stream().filter(routeDefinition -> routeDefinition.getId().matches(".*-service")).forEach(routeDefinition -> {
-			String name = routeDefinition.getId().replaceAll("-service", "");
-			groups.add(GroupedOpenApi.builder().pathsToMatch("/" + name + "/**").setGroup(name).build());
-		});
+		definitions.stream().filter(routeDefinition -> routeDefinition.getId().matches(".*-service"))
+				.forEach(routeDefinition -> {
+					String name = routeDefinition.getId().replaceAll("-service", "");
+					groups.add(GroupedOpenApi.builder().pathsToMatch("/" + name + "/**").setGroup(name).build());
+				});
 		return groups;
 	}
-	
-	/*
-	 * @Bean public WebFluxConfigurer corsConfigurer() { return new
-	 * WebFluxConfigurerComposite() {
-	 * 
-	 * @Override public void addCorsMappings(CorsRegistry registry) {
-	 * registry.addMapping("/**").allowedOrigins("*") .allowedMethods("*"); } }; }
-	 */
+
+	@Bean
+	public WebFluxConfigurer corsConfigurer() {
+		return new WebFluxConfigurerComposite() {
+
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
+			}
+		};
+	}
 
 }

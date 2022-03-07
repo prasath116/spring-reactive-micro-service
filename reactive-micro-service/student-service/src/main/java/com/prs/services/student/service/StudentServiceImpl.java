@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.prs.services.exceptionHandler.DataException;
 import com.prs.services.student.entity.StudentEntity;
 import com.prs.services.student.model.Student;
 import com.prs.services.student.repository.StudentRepository;
@@ -26,6 +27,14 @@ public class StudentServiceImpl implements IStudentService {
 		return repository.saveAll(Arrays.asList(entity)).last().map(mapper);
 	}
 
+	@Override
+	public Mono<Student> update(Long id, StudentEntity entity) {
+		return findById(id).flatMap(s-> {
+			entity.setId(id);
+			return save(entity);
+		}).switchIfEmpty(Mono.error(new DataException("Student not fount for id : "+id)));
+	}
+	
 	@Override
 	public Flux<Student> findAll() {
 		return repository.findAll().map(mapper);

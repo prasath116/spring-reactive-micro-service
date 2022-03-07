@@ -9,6 +9,8 @@ import reactor.core.publisher.Mono;
 public interface IStudentService {
 
 	Mono<Student> save(StudentEntity entity);
+	
+	Mono<Student> update(Long id, StudentEntity entity);
 
 	Flux<Student> findAll();
 
