@@ -21,7 +21,7 @@ public class DepartmentApplication {
 		SpringApplication.run(DepartmentApplication.class, args);
 	}
 
-	@Bean
+//	@Bean
 	ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
 
 		ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
