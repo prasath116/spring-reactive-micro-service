@@ -19,5 +19,7 @@ public interface IEmployeeService {
 
 	Flux<Employee> findByDepartment(Long departmentId);
 
+	Mono<Void> deleteById(Long id);
+
 
 }

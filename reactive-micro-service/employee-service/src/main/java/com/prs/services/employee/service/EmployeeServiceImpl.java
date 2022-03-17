@@ -48,6 +48,11 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	public Mono<Employee> findById(Long id) {
 		return repository.findById(id).map(entityToVomapper);
 	}
+	
+	@Override
+	public Mono<Void> deleteById(Long id) {
+		return repository.deleteById(id);
+	}
 
 	@Override
 	public Flux<Employee> findByCollege(Long collegeId) {
