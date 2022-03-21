@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.prs.services.exceptionHandler.DataException;
+import com.prs.services.student.client.CollegeReactiveClient;
+import com.prs.services.student.client.DepartmentReactiveClient;
 import com.prs.services.student.entity.StudentEntity;
+import com.prs.services.student.model.College;
+import com.prs.services.student.model.Department;
 import com.prs.services.student.model.Student;
 import com.prs.services.student.repository.StudentRepository;
 
@@ -20,11 +24,17 @@ public class StudentServiceImpl implements IStudentService {
 
 	@Autowired
 	private StudentRepository repository;
+	
+	@Autowired
+	private DepartmentReactiveClient departmentClient;
+	@Autowired
+	private CollegeReactiveClient collegeClient;
+	
 
 	@Override
 	public Mono<Student> save(StudentEntity entity) {
 //		return repository.save(entity).map(mapper);Issue in SimpleR2dbcRepository save(e); So used saveAll for time being
-		return repository.saveAll(Arrays.asList(entity)).last().map(mapper);
+		return repository.saveAll(Arrays.asList(entity)).last().flatMap(mapper);
 	}
 
 	@Override
@@ -37,12 +47,12 @@ public class StudentServiceImpl implements IStudentService {
 	
 	@Override
 	public Flux<Student> findAll() {
-		return repository.findAll().map(mapper);
+		return repository.findAll().map(simpleMapper);
 	}
 
 	@Override
 	public Mono<Student> findById(Long id) {
-		return repository.findById(id).map(mapper);
+		return repository.findById(id).flatMap(mapper);
 	}
 
 	@Override
@@ -52,20 +62,37 @@ public class StudentServiceImpl implements IStudentService {
 	
 	@Override
 	public Flux<Student> findByCollege(Long collegeId) {
-		return findAll().filter(a -> a.getCollegeId().equals(collegeId));
+		return findAll().filter(a -> a.getCollege().getId().equals(collegeId));
 //		return Flux.fromIterable(repository.findByCollegeId(collegeId)).map(mapper);
 	}
 
 	@Override
 	public Flux<Student> findByDepartment(Long departmentId) {
-		return findAll().filter(a -> a.getDepartmentId().equals(departmentId));
+		return findAll().filter(a -> a.getDepartment().getId().equals(departmentId));
 //		return Flux.fromIterable(repository.findByDepartmentId(departmentId)).map(mapper);
 	}
 
-	private Function<StudentEntity, Student> mapper = c -> {
-		Student response = new Student();
-		BeanUtils.copyProperties(c, response);
-		return response;
+	private Function<StudentEntity, Mono<Student>> mapper = c -> {
+		var student = new Student();
+		BeanUtils.copyProperties(c, student);
+		var department = departmentClient.findByDepartment(c.getDepartmentId());
+		var college = collegeClient.findByCollege(c.getCollegeId());
+		var tuple = Mono.zip(department, college);
+		return tuple.map(t-> {
+			var dept = new Department();	
+			var coll = new College();
+			BeanUtils.copyProperties(t.getT1(), dept);
+			BeanUtils.copyProperties(t.getT2(), coll);
+			student.setCollege(coll);
+			student.setDepartment(dept);
+			return student;
+		});
+	};
+	
+	private Function<StudentEntity, Student> simpleMapper = c -> {
+		var student = new Student();
+		BeanUtils.copyProperties(c, student);
+		return student;
 	};
 
 

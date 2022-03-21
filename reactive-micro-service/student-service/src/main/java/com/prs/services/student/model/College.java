@@ -8,16 +8,11 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
+@ToString
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
-public class Student {
-
+public class College {
 	private Long id;
 	private String name;
-	private int age;
-	
-	private College college;
-	private Department department;
-
+	private String address;
 }
