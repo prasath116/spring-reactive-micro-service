@@ -33,8 +33,8 @@ public class StudentServiceImpl implements IStudentService {
 
 	@Override
 	public Mono<Student> save(StudentEntity entity) {
-//		return repository.save(entity).map(mapper);Issue in SimpleR2dbcRepository save(e); So used saveAll for time being
-		return repository.saveAll(Arrays.asList(entity)).last().flatMap(mapper);
+//		return repository.save(entity).map(mapper); Issue in SimpleR2dbcRepository save(e); So used saveAll for time being
+		return repository.saveAll(Arrays.asList(entity)).last().map(simpleMapper);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class StudentServiceImpl implements IStudentService {
 
 	@Override
 	public Mono<Student> findById(Long id) {
-		return repository.findById(id).flatMap(mapper);
+		return repository.findById(id).flatMap(deepMapper);
 	}
 
 	@Override
@@ -63,37 +63,31 @@ public class StudentServiceImpl implements IStudentService {
 	@Override
 	public Flux<Student> findByCollege(Long collegeId) {
 		return findAll().filter(a -> a.getCollege().getId().equals(collegeId));
-//		return Flux.fromIterable(repository.findByCollegeId(collegeId)).map(mapper);
 	}
 
 	@Override
 	public Flux<Student> findByDepartment(Long departmentId) {
 		return findAll().filter(a -> a.getDepartment().getId().equals(departmentId));
-//		return Flux.fromIterable(repository.findByDepartmentId(departmentId)).map(mapper);
 	}
 
-	private Function<StudentEntity, Mono<Student>> mapper = c -> {
-		var student = new Student();
-		BeanUtils.copyProperties(c, student);
-		var department = departmentClient.findByDepartment(c.getDepartmentId());
-		var college = collegeClient.findByCollege(c.getCollegeId());
-		var tuple = Mono.zip(department, college);
-		return tuple.map(t-> {
-			var dept = new Department();	
-			var coll = new College();
-			BeanUtils.copyProperties(t.getT1(), dept);
-			BeanUtils.copyProperties(t.getT2(), coll);
-			student.setCollege(coll);
-			student.setDepartment(dept);
-			return student;
-		});
-	};
-	
 	private Function<StudentEntity, Student> simpleMapper = c -> {
 		var student = new Student();
 		BeanUtils.copyProperties(c, student);
 		return student;
 	};
-
-
+	
+	private Function<StudentEntity, Mono<Student>> deepMapper = c -> {
+		var student = simpleMapper.apply(c);
+		var college = collegeClient.findByCollege(c.getCollegeId());
+		var department = departmentClient.findByDepartment(c.getDepartmentId());
+		var tuple = Mono.zip(college,department);
+		return tuple.map(t-> {
+			student.setCollege(new College());
+			student.setDepartment(new Department());
+			BeanUtils.copyProperties(t.getT1(), student.getCollege());
+			BeanUtils.copyProperties(t.getT2(), student.getDepartment());
+			return student;
+		});
+	};
+	
 }

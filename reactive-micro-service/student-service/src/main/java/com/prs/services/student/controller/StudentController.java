@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ public class StudentController {
 	IStudentService service;
 	
 	@PostMapping("/add")
+	@ResponseStatus(HttpStatus.CREATED)
 	public Mono<Student> add(@RequestBody StudentEntity employee) {
 		LOGGER.info("Student add: {}", employee);
 		return service.save(employee);
@@ -55,8 +57,11 @@ public class StudentController {
 	}
 	
 	@PutMapping("/update/{id}")
-    public Mono<Student> update(@PathVariable("id") Long id,@RequestBody StudentEntity employee){
-        return service.update(id, employee);
+	@ResponseStatus(HttpStatus.OK)
+    public Mono<ResponseEntity<Student>> update(@PathVariable("id") Long id,@RequestBody StudentEntity student){
+        return service.update(id, student).map(s -> ResponseEntity.ok()
+                .body(s))
+        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
 
     }
 	
