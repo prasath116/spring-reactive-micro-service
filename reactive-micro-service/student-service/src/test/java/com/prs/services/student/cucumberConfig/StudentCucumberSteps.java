@@ -2,8 +2,6 @@ package com.prs.services.student.cucumberConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -15,8 +13,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class StudentCucumberSteps {
-
-	private final Logger log = LoggerFactory.getLogger(StudentCucumberSteps.class);
 	StudentEntity studentTest = new StudentEntity(null, "testCucumber", 25, 2l, 2l);
 	@Autowired
 	private WebTestClient webTestClient;

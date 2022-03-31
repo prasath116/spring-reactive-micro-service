@@ -1,10 +1,14 @@
 package com.prs.services.student.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.List;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +22,7 @@ import com.prs.services.student.repository.StudentRepository;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
+@TestMethodOrder(OrderAnnotation.class)
 public class StudentControllerIntegrationTest {
 
     @Autowired
@@ -25,6 +30,8 @@ public class StudentControllerIntegrationTest {
     
     @Autowired
     private StudentRepository studentRepository;
+    
+    static Long testId;
     
 //    @BeforeEach
     void setUp() {
@@ -39,6 +46,7 @@ public class StudentControllerIntegrationTest {
     }
     
     @Test
+    @Order(1)
     void getAllStudents() {
         webTestClient
                 .get()
@@ -56,11 +64,35 @@ public class StudentControllerIntegrationTest {
     }
 
     @Test
+    @Order(2)
+    void addStudent() {
+    	var student = new StudentEntity(null,"Prasath",31,1l,1l);
+        webTestClient
+                .post()
+                .uri("/add")
+                .bodyValue(student)
+                .exchange()
+                .expectStatus()
+                .isCreated()
+                .expectBody(Student.class)
+                .consumeWith(result -> {
+    				var s = result.getResponseBody();
+    				assert s != null;
+    				assertNotEquals(null, s);
+    				assertEquals("Prasath", s.getName());
+    				testId = s.getId();
+    				System.out.println("testId received : "+testId);
+    				assertNotEquals(null, testId);
+    			});
+    }
+    
+    @Test
+    @Order(3)
 	void getStudentById() {
-		Long id = 1l;
+    	System.out.println("testId in getStudentById: "+testId);
 		webTestClient
 			.get()
-			.uri("/get-by/{id}", id)
+			.uri("/get-by/{id}", testId)
 			.exchange()
 			.expectStatus()
 			.is2xxSuccessful()
@@ -68,20 +100,20 @@ public class StudentControllerIntegrationTest {
 			.consumeWith(result -> {
 				var student = result.getResponseBody();
 				assert student != null;
-				assertEquals("aa", student.getName());
+				assertEquals("Prasath", student.getName());
 			});
 			//.expectBody() .jsonPath("$.name").isEqualTo("Prasath");
 
 	}
     
     @Test
+    @Order(4)
     void updateStudent() {
-    	var id = 2l;
-        var updatedStudent = new StudentEntity(2l,"Nishanthi M",30,2l,2l);
+        var updatedStudent = new StudentEntity(testId,"Nishanthi M",30,2l,2l);
 
         webTestClient
                 .put()
-                .uri("/update/{id}", id)
+                .uri("/update/{id}", testId)
                 .bodyValue(updatedStudent)
                 .exchange()
                 .expectStatus()
@@ -95,9 +127,10 @@ public class StudentControllerIntegrationTest {
     }
 
     @Test
+    @Order(5)
     void updateStudent_notFound() {
         var id = 5l;
-        var updatedStudent = new StudentEntity(2l,"Nishanthi M",30,2l,2l);
+        var updatedStudent = new StudentEntity(testId,"Nishanthi M",30,2l,2l);
 
         webTestClient
                 .put()
@@ -109,12 +142,11 @@ public class StudentControllerIntegrationTest {
     }
     
     @Test
+    @Order(6)
     void deleteStudentById() {
-    	 var id = 2l;
-
         webTestClient
                 .delete()
-                .uri("/delete/{id}", id)
+                .uri("/delete/{id}", testId)
                 .exchange()
                 .expectStatus()
                 .isNoContent();

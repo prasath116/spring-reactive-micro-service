@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.prs.services.exceptionHandler.DataException;
+import com.prs.services.exceptionHandler.NotFoundException;
 import com.prs.services.student.client.CollegeReactiveClient;
 import com.prs.services.student.client.DepartmentReactiveClient;
 import com.prs.services.student.entity.StudentEntity;
@@ -42,7 +42,7 @@ public class StudentServiceImpl implements IStudentService {
 		return findById(id).flatMap(s-> {
 			entity.setId(id);
 			return save(entity);
-		}).switchIfEmpty(Mono.error(new DataException("Student not fount for id : "+id)));
+		}).switchIfEmpty(Mono.error(new NotFoundException("Student not fount for id : "+id)));
 	}
 	
 	@Override
