@@ -23,6 +23,10 @@ public class StudentApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(StudentApplication.class, args);
+		/*
+		 * Mono.just(new AtomicInteger(5)) .doOnNext(s->s.set(8))
+		 * .subscribe(s->System.out.println("dddddd : "+s));
+		 */
 	}
 	
 	@Bean
