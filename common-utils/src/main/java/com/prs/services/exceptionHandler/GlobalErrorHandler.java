@@ -18,8 +18,14 @@ public class GlobalErrorHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex){
-        log.error("Exception caught in handleClientException :  {} " ,ex.getMessage(),  ex);
+        log.error("Exception caught in handleClientException :  {} " ,ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+    
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException ex){
+        log.error("Exception caught in handleClientException :  {} " ,ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
     
     @ExceptionHandler(WebExchangeBindException.class)
